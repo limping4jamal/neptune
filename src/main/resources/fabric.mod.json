@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "neptune",
+  "version": "0.0.2",
+
+  "name": "Neptune",
+  "description": "Best HvH Client for 2b2t! in early development",
+  "authors": [
+    "heedi",
+    "AxizCat",
+    "PPX005",
+    "ThomasTheGray"
+  ],
+  "contact": {
+    "discord": "https://discord.gg/UhaJbFAeJD",
+    "homepage": "https://neptune.client",
+    "sources": "https://github.com/heedii/Neptune"
+  },
+  "accessWidener": "Neptune.accesswidener",
+  "license": "CC0-1.0",
+  "icon": "assets/modid/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "me.neptune.Neptune"
+    ]
+  },
+  "mixins": [
+    "modid.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.15.2",
+    "fabric-api": ">=0.92.0",
+    "minecraft": "1.20.4",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

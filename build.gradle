@@ -1,0 +1,84 @@
+plugins {
+	id 'fabric-loom' version '1.1-SNAPSHOT'
+	id 'maven-publish'
+	id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+	mavenCentral()
+	jcenter()
+}
+
+configurations {
+	include.extendsFrom(modInclude)
+	modImplementation.extendsFrom(modInclude)
+
+	// include libraries
+	implementation.extendsFrom(library)
+	shadow.extendsFrom(library)
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// sdk
+	implementation 'club.minnced:java-discord-rpc:2.0.1'
+
+	// Fabric API
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+
+	library files("libs\\orbit-0.2.5.jar")
+}
+
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 17
+}
+
+java {
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	repositories {
+	}
+}
+
+remapJar {
+	dependsOn shadowJar
+	inputFile.set(shadowJar.archiveFile)
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/Neptune.accesswidener")
+}
